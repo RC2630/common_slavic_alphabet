@@ -1,0 +1,13 @@
+polish latin Polish
+czech latin Czech
+slovak latin Slovak
+slovene latin Slovene
+serbo-croatian latin Serbo-Croatian (Latin Script)
+montenegrin latin Montenegrin (Latin Script)
+russian cyrillic Russian
+ukrainian cyrillic Ukrainian
+belarusian cyrillic Belarusian
+bulgarian cyrillic Bulgarian
+macedonian cyrillic Macedonian
+serbo-croatian cyrillic Serbo-Croatian (Cyrillic Script)
+montenegrin cyrillic Montenegrin (Cyrillic Script)

@@ -1,0 +1,17 @@
+single to single:
+lower -> lower
+upper -> upper
+
+single to multiple:
+lower -> lower
+upper -> sentence
+
+multiple to single:
+lower -> lower
+sentence -> upper
+upper -> upper
+
+multiple to multiple:
+lower -> lower
+sentence -> sentence
+upper -> upper
