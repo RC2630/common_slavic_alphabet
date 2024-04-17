@@ -1,0 +1,10 @@
+single single lowercase -> lowercase
+single single uppercase -> uppercase
+single multiple lowercase -> lowercase
+single multiple uppercase -> sentence
+multiple single lowercase -> lowercase
+multiple single sentence -> uppercase
+multiple single uppercase -> uppercase
+multiple multiple lowercase -> lowercase
+multiple multiple sentence -> sentence
+multiple multiple uppercase -> uppercase

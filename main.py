@@ -1,4 +1,5 @@
 from io import TextIOWrapper as File
+from typing import Callable
 
 class Language:
 
@@ -20,6 +21,7 @@ CYRILLIC_SPECIFIC_FILE: str = "mappings/language_specific_cyrillic.txt"
 LATIN_SPECIFIC_FILE: str = "mappings/language_specific_latin.txt"
 UPPER_LOWER_FILE: str = "mappings/uppercase_lowercase.txt"
 CHOICE_TO_LANGUAGE_FILE: str = "mappings/choice_lang_script.txt"
+CASE_SCENARIO_FILE: str = "mappings/case_scenarios.txt"
 
 MAX_MAPPING_LENGTH: int = -1
 
@@ -29,6 +31,7 @@ LATIN_SPECIFIC_MAP: dict[int, dict[str, dict[str, str]]] = {}
 UPPER_TO_LOWER_MAP: dict[str, str] = {}
 LOWER_TO_UPPER_MAP: dict[str, str] = {}
 CHOICE_TO_LANGUAGE_MAP: dict[int, Language] = {}
+CASE_SCENARIO_MAP: dict[tuple[str, str, str], Callable[[str], str]] = {}
 
 def readFileAndSplitByLineAndSpace(filename: str) -> list[list[str]]:
     file: File = open(filename, "r", encoding = "utf-8")
@@ -121,28 +124,46 @@ def toSentenceCase(s: str) -> str:
     restChars: str = toLowerCase(s[1:])
     return firstChar + restChars
 
+def initializeCaseScenarioMap() -> None:
+    content: list[list[str]] = readFileAndSplitByLineAndSpace(CASE_SCENARIO_FILE)
+    for entry in content:
+        scenario: tuple[str, str, str] = (entry[0], entry[1], entry[2])
+        scenarioCaseType: str = entry[-1]
+        if scenarioCaseType == "lowercase":
+            CASE_SCENARIO_MAP[scenario] = toLowerCase
+        elif scenarioCaseType == "uppercase":
+            CASE_SCENARIO_MAP[scenario] = toUpperCase
+        elif scenarioCaseType == "sentence":
+            CASE_SCENARIO_MAP[scenario] = toSentenceCase
+
+def refineCaseOfMapped(original: str, mapped: str) -> str:
+    ogLength: str = "single" if len(original) == 1 else "multiple"
+    mappedLength: str = "single" if len(mapped) == 1 else "multiple"
+    ogCase: str = getCaseType(original)
+    scenario: tuple[str, str, str] = (ogLength, mappedLength, ogCase)
+    return CASE_SCENARIO_MAP[scenario](mapped)
+
+def transliterate(language: Language) -> None:
+    pass
+
 if __name__ == "__main__":
 
-    initializeUpperLowerMaps()
-    initializeCyrillicDefaultMap()
-    initializeSpecificMap(CYRILLIC_SPECIFIC_MAP, CYRILLIC_SPECIFIC_FILE)
-    initializeSpecificMap(LATIN_SPECIFIC_MAP, LATIN_SPECIFIC_FILE)
-    initializeChoiceToLangMap()
+    print("\nWelcome to the Common Slavic Alphabet transliterator!\n" +
+          "Please select the language that you would like to transliterate:\n")
+    
+    for i in CHOICE_TO_LANGUAGE_MAP.keys():
+        print(f"({i}) {CHOICE_TO_LANGUAGE_MAP[i].description}")
 
-    print(readFileAndSplitByLineAndSpace(CYRILLIC_DEFAULT_FILE), end = "\n\n")
-    print(CYRILLIC_DEFAULT_MAP, end = "\n\n")
+    try:
+        choice: int = int(input("\nEnter your choice here: "))
+        language: Language = CHOICE_TO_LANGUAGE_MAP[choice]
+    except KeyError:
+        print("Sorry, but you need to enter one of the choices shown above.")
+        exit()
+    except ValueError:
+        print("Sorry, but you need to enter a valid integer.")
+        exit()
 
-    print(readFileAndSplitByLineAndSpace(CYRILLIC_SPECIFIC_FILE), end = "\n\n")
-    print(CYRILLIC_SPECIFIC_MAP, end = "\n\n")
-
-    print(readFileAndSplitByLineAndSpace(LATIN_SPECIFIC_FILE), end = "\n\n")
-    print(LATIN_SPECIFIC_MAP, end = "\n\n")
-
-    print(readFileAndSplitByLineAndSpace(UPPER_LOWER_FILE), end = "\n\n")
-    print(UPPER_TO_LOWER_MAP, end = "\n\n")
-    print(LOWER_TO_UPPER_MAP, end = "\n\n")
-
-    print(readFileAndSplitByLineAndSpace(CHOICE_TO_LANGUAGE_FILE), end = "\n\n")
-    print(CHOICE_TO_LANGUAGE_MAP, end = "\n\n")
-
-    print(MAX_MAPPING_LENGTH)
+    print(f"Your choice is {choice} and your language is \"{language.description}\".")
+    transliterate(language)
+    print(f"\nTransliteration complete!\nThank you for using this transliterator, and have a nice day!")
