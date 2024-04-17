@@ -143,10 +143,29 @@ def refineCaseOfMapped(original: str, mapped: str) -> str:
     scenario: tuple[str, str, str] = (ogLength, mappedLength, ogCase)
     return CASE_SCENARIO_MAP[scenario](mapped)
 
+def transliterateContent(content: str, language: Language) -> str:
+    return content
+
 def transliterate(language: Language) -> None:
-    pass
+    
+    inputFile: File = open(INPUT_FILE, "r", encoding = "utf-8")
+    outputFile: File = open(OUTPUT_FILE, "w", encoding = "utf-8")
+
+    content: str = inputFile.read()
+    transliterated: str = transliterateContent(content, language)
+    outputFile.write(transliterated)
+
+    inputFile.close()
+    outputFile.close()
 
 if __name__ == "__main__":
+
+    initializeUpperLowerMaps()
+    initializeCyrillicDefaultMap()
+    initializeSpecificMap(CYRILLIC_SPECIFIC_MAP, CYRILLIC_SPECIFIC_FILE)
+    initializeSpecificMap(LATIN_SPECIFIC_MAP, LATIN_SPECIFIC_FILE)
+    initializeChoiceToLangMap()
+    initializeCaseScenarioMap()
 
     print("\nWelcome to the Common Slavic Alphabet transliterator!\n" +
           "Please select the language that you would like to transliterate:\n")
