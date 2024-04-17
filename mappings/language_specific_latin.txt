@@ -1,0 +1,27 @@
+ą ǫ polish
+ä ea slovak
+ci ći polish
+cz č polish
+dzi dźi polish
+dż dž polish
+ď dź czech slovak
+đ dź serbo-croatian montenegrin
+ě je czech
+h ch polish slovene serbo-croatian montenegrin
+i y czech
+ľ lj slovak
+ni ńi polish
+nj ń slovene serbo-croatian montenegrin
+ň ń czech slovak
+ó u polish
+ô uo slovak
+rz ž polish
+si śi polish
+sz š polish
+ť ć czech slovak
+ů ú czech
+w v polish
+y i slovak
+ý í czech slovak
+zi źi polish
+ż ž polish
