@@ -83,6 +83,44 @@ def initializeChoiceToLangMap() -> None:
         description: str = " ".join(entry[2:])
         CHOICE_TO_LANGUAGE_MAP[i + 1] = Language(entry[0], entry[1], description)
 
+# returns one of {"lowercase", "uppercase", "neither"}
+def getCase(character: str) -> str:
+    if character in LOWER_TO_UPPER_MAP:
+        return "lowercase"
+    elif character in UPPER_TO_LOWER_MAP:
+        return "uppercase"
+    else:
+        return "neither"
+    
+# returns one of {"lowercase", "uppercase", "sentence"}
+def getCaseType(s: str) -> str:
+    if len(s) == 1:
+        return "uppercase" if getCase(s) == "uppercase" else "lowercase"
+    elif len(s) >= 2:
+        firstCharacterType: str = getCaseType(s[0])
+        secondCharacterType: str = getCaseType(s[1])
+        if firstCharacterType == "uppercase" and secondCharacterType == "uppercase":
+            return "uppercase"
+        elif firstCharacterType == "lowercase" and secondCharacterType == "lowercase":
+            return "lowercase"
+        elif firstCharacterType == "uppercase" and secondCharacterType == "lowercase":
+            return "sentence"
+        else:
+            return "lowercase" # this scenario is assumed to never occur
+    else:
+        raise RuntimeError("cannot be used on empty string")
+    
+def toLowerCase(s: str) -> str:
+    return "".join([UPPER_TO_LOWER_MAP.get(c, c) for c in s])
+    
+def toUpperCase(s: str) -> str:
+    return "".join([LOWER_TO_UPPER_MAP.get(c, c) for c in s])
+    
+def toSentenceCase(s: str) -> str:
+    firstChar: str = toUpperCase(s[0])
+    restChars: str = toLowerCase(s[1:])
+    return firstChar + restChars
+
 if __name__ == "__main__":
 
     initializeUpperLowerMaps()
