@@ -143,8 +143,62 @@ def refineCaseOfMapped(original: str, mapped: str) -> str:
     scenario: tuple[str, str, str] = (ogLength, mappedLength, ogCase)
     return CASE_SCENARIO_MAP[scenario](mapped)
 
+def nestedDictContains3Layers(
+    d: dict[int, dict[str, dict[str, str]]], length: int, lang: str, mapFrom: str
+) -> bool:
+    if length not in d:
+        return False
+    if lang not in d[length]:
+        return False
+    return mapFrom in d[length][lang]
+
+def nestedDictContains2Layers(
+    d: dict[int, dict[str, str]], length: int, mapFrom: str
+) -> bool:
+    if length not in d:
+        return False
+    return mapFrom in d[length]
+
 def transliterateContent(content: str, language: Language) -> str:
-    return content
+    
+    transliterated: str = ""
+    index: int = 0
+
+    while index < len(content):
+        mapped: bool = False
+        for length in range(MAX_MAPPING_LENGTH, 0, -1):
+
+            substring: str = content[index : index + length]
+            trueLength: int = len(substring)
+            substringLower: str = toLowerCase(substring)
+            
+            if language.script == "cyrillic":
+                if nestedDictContains3Layers(
+                    CYRILLIC_SPECIFIC_MAP, trueLength, language.lang, substringLower
+                ):
+                    transliterated += refineCaseOfMapped(
+                        substring, CYRILLIC_SPECIFIC_MAP[trueLength][language.lang][substringLower]
+                    ); index += trueLength; mapped = True; break
+                elif nestedDictContains2Layers(
+                    CYRILLIC_DEFAULT_MAP, trueLength, substringLower
+                ):
+                    transliterated += refineCaseOfMapped(
+                        substring, CYRILLIC_DEFAULT_MAP[trueLength][substringLower]
+                    ); index += trueLength; mapped = True; break
+
+            elif language.script == "latin":
+                if nestedDictContains3Layers(
+                    LATIN_SPECIFIC_MAP, trueLength, language.lang, substringLower
+                ):
+                    transliterated += refineCaseOfMapped(
+                        substring, LATIN_SPECIFIC_MAP[trueLength][language.lang][substringLower]
+                    ); index += trueLength; mapped = True; break
+        
+        if not mapped:
+            transliterated += content[index]
+            index += 1
+
+    return transliterated
 
 def transliterate(language: Language) -> None:
     

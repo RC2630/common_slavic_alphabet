@@ -25,3 +25,8 @@ y i slovak
 ý í czech slovak
 zi źi polish
 ż ž polish
+ch ch polish czech slovak
+lj lj slovene serbo-croatian montenegrin
+dz dz polish czech slovak slovene serbo-croatian montenegrin
+dž dž czech slovak slovene serbo-croatian montenegrin
+dź dź polish
