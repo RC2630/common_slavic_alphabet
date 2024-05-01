@@ -22,6 +22,7 @@ LATIN_SPECIFIC_FILE: str = "mappings/language_specific_latin.txt"
 UPPER_LOWER_FILE: str = "mappings/uppercase_lowercase.txt"
 CHOICE_TO_LANGUAGE_FILE: str = "mappings/choice_lang_script.txt"
 CASE_SCENARIO_FILE: str = "mappings/case_scenarios.txt"
+VOWELS_FILE: str = "lists/vowels.txt"
 
 MAX_MAPPING_LENGTH: int = -1
 
@@ -33,11 +34,20 @@ LOWER_TO_UPPER_MAP: dict[str, str] = {}
 CHOICE_TO_LANGUAGE_MAP: dict[int, Language] = {}
 CASE_SCENARIO_MAP: dict[tuple[str, str, str], Callable[[str], str]] = {}
 
+VOWELS_LIST: list[str] = []
+
 def readFileAndSplitByLineAndSpace(filename: str) -> list[list[str]]:
     file: File = open(filename, "r", encoding = "utf-8")
     content: list[str] = file.read().split("\n")
     file.close()
     return [line.split(" ") for line in content]
+
+def initializeVowelList() -> None:
+    global VOWELS_LIST
+    file: File = open(VOWELS_FILE, "r", encoding = "utf-8")
+    content: list[str] = file.read().split("\n")
+    file.close()
+    VOWELS_LIST = content
 
 def getMaxMappingLengthFromContent(content: list[list[str]]) -> int:
     global MAX_MAPPING_LENGTH
@@ -159,6 +169,16 @@ def nestedDictContains2Layers(
         return False
     return mapFrom in d[length]
 
+def substituteAsterisk(rawMapped: str, index: int, content: str) -> str:
+    if rawMapped != "v*":
+        return rawMapped
+    elif index == len(content) - 1:
+        return "ł"
+    elif toLowerCase(content[index + 1]) in VOWELS_LIST:
+        return "v"
+    else:
+        return "ł"
+
 def transliterateContent(content: str, language: Language) -> str:
     
     transliterated: str = ""
@@ -177,7 +197,10 @@ def transliterateContent(content: str, language: Language) -> str:
                     CYRILLIC_SPECIFIC_MAP, trueLength, language.lang, substringLower
                 ):
                     transliterated += refineCaseOfMapped(
-                        substring, CYRILLIC_SPECIFIC_MAP[trueLength][language.lang][substringLower]
+                        substring, substituteAsterisk(
+                            CYRILLIC_SPECIFIC_MAP[trueLength][language.lang][substringLower],
+                            index, content
+                        )
                     ); index += trueLength; mapped = True; break
                 elif nestedDictContains2Layers(
                     CYRILLIC_DEFAULT_MAP, trueLength, substringLower
@@ -191,7 +214,10 @@ def transliterateContent(content: str, language: Language) -> str:
                     LATIN_SPECIFIC_MAP, trueLength, language.lang, substringLower
                 ):
                     transliterated += refineCaseOfMapped(
-                        substring, LATIN_SPECIFIC_MAP[trueLength][language.lang][substringLower]
+                        substring, substituteAsterisk(
+                            LATIN_SPECIFIC_MAP[trueLength][language.lang][substringLower],
+                            index, content
+                        )
                     ); index += trueLength; mapped = True; break
         
         if not mapped:
@@ -220,6 +246,7 @@ if __name__ == "__main__":
     initializeSpecificMap(LATIN_SPECIFIC_MAP, LATIN_SPECIFIC_FILE)
     initializeChoiceToLangMap()
     initializeCaseScenarioMap()
+    initializeVowelList()
 
     print("\nWelcome to the Common Slavic Alphabet transliterator!\n" +
           "Please select the language that you would like to transliterate:\n")

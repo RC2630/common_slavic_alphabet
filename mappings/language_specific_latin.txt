@@ -30,3 +30,4 @@ lj lj slovene serbo-croatian montenegrin
 dz dz polish czech slovak slovene serbo-croatian montenegrin
 dž dž czech slovak slovene serbo-croatian montenegrin
 dź dź polish
+v v* slovene
