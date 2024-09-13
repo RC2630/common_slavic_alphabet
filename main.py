@@ -1,5 +1,5 @@
 from io import TextIOWrapper as File
-from typing import Callable
+from typing import Callable, Any
 
 class Language:
 
@@ -56,7 +56,7 @@ def getMaxMappingLengthFromContent(content: list[list[str]]) -> int:
     MAX_MAPPING_LENGTH = max(MAX_MAPPING_LENGTH, maxLength)
     return maxLength
 
-def initializeDictToMaxLength(d: dict[int, dict[any, any]], maxLength: int) -> None:
+def initializeDictToMaxLength(d: dict[int, dict[Any, Any]], maxLength: int) -> None:
     for i in range(1, maxLength + 1):
         d[i] = {}
 
