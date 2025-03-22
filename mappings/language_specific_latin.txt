@@ -84,3 +84,7 @@ io jo polish
 ió ju polish
 iu ju polish
 iy jy polish
+ęl el polish
+ęł eł polish
+ąl ol polish
+ął oł polish
