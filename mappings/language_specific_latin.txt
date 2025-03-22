@@ -1,8 +1,26 @@
 ą ǫ polish
 ä ea slovak
 ci ći polish
+cia ća polish
+cią ćǫ polish
+cie će polish
+cię ćę polish
+cii ćji polish
+cio ćo polish
+ció ću polish
+ciu ću polish
+ciy ćy polish
 cz č polish
 dzi dźi polish
+dzia dźa polish
+dzią dźǫ polish
+dzie dźe polish
+dzię dźę polish
+dzii dźji polish
+dzio dźo polish
+dzió dźu polish
+dziu dźu polish
+dziy dźy polish
 dż dž polish
 ď dź czech slovak
 đ dź serbo-croatian montenegrin
@@ -11,12 +29,30 @@ h ch polish slovene serbo-croatian montenegrin
 i y czech
 ľ lj slovak
 ni ńi polish
+nia ńa polish
+nią ńǫ polish
+nie ńe polish
+nię ńę polish
+nii ńji polish
+nio ńo polish
+nió ńu polish
+niu ńu polish
+niy ńy polish
 nj ń slovene serbo-croatian montenegrin
 ň ń czech slovak
 ó u polish
 ô uo slovak
 rz ž polish
 si śi polish
+sia śa polish
+sią śǫ polish
+sie śe polish
+się śę polish
+sii śji polish
+sio śo polish
+sió śu polish
+siu śu polish
+siy śy polish
 sz š polish
 ť ć czech slovak
 ů ú czech
@@ -24,9 +60,27 @@ w v polish
 y i slovak
 ý í czech slovak
 zi źi polish
+zia źa polish
+zią źǫ polish
+zie źe polish
+zię źę polish
+zii źji polish
+zio źo polish
+zió źu polish
+ziu źu polish
+ziy źy polish
 ż ž polish
 ch ch polish czech slovak
 lj lj slovene serbo-croatian montenegrin
 dz dz polish czech slovak slovene serbo-croatian montenegrin
 dž dž czech slovak slovene serbo-croatian montenegrin
 dź dź polish
+ia ja polish
+ią jǫ polish
+ie je polish
+ię ję polish
+ii ji polish
+io jo polish
+ió ju polish
+iu ju polish
+iy jy polish
