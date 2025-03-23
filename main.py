@@ -19,6 +19,7 @@ OUTPUT_FILE: str = "transliteration/output.txt"
 CYRILLIC_DEFAULT_FILE: str = "mappings/cyrillic_default.txt"
 CYRILLIC_SPECIFIC_FILE: str = "mappings/language_specific_cyrillic.txt"
 LATIN_SPECIFIC_FILE: str = "mappings/language_specific_latin.txt"
+CSA_LATIN_TO_CYRILLIC_FILE: str = "mappings/csa_latin_to_cyrillic.txt"
 UPPER_LOWER_FILE: str = "mappings/uppercase_lowercase.txt"
 CHOICE_TO_LANGUAGE_FILE: str = "mappings/choice_lang_script.txt"
 CASE_SCENARIO_FILE: str = "mappings/case_scenarios.txt"
@@ -29,6 +30,7 @@ MAX_MAPPING_LENGTH: int = -1
 CYRILLIC_DEFAULT_MAP: dict[int, dict[str, str]] = {}
 CYRILLIC_SPECIFIC_MAP: dict[int, dict[str, dict[str, str]]] = {}
 LATIN_SPECIFIC_MAP: dict[int, dict[str, dict[str, str]]] = {}
+CSA_LATIN_TO_CYRILLIC_MAP: dict[int, dict[str, str]] = {}
 UPPER_TO_LOWER_MAP: dict[str, str] = {}
 LOWER_TO_UPPER_MAP: dict[str, str] = {}
 CHOICE_TO_LANGUAGE_MAP: dict[int, Language] = {}
@@ -66,11 +68,11 @@ def initializeUpperLowerMaps() -> None:
         UPPER_TO_LOWER_MAP[entry[0]] = entry[1]
         LOWER_TO_UPPER_MAP[entry[1]] = entry[0]
 
-def initializeCyrillicDefaultMap() -> None:
-    content: list[list[str]] = readFileAndSplitByLineAndSpace(CYRILLIC_DEFAULT_FILE)
-    initializeDictToMaxLength(CYRILLIC_DEFAULT_MAP, getMaxMappingLengthFromContent(content))
+def initializeDefaultMap(defaultMap: dict[int, dict[str, str]], defaultFilename: str) -> None:
+    content: list[list[str]] = readFileAndSplitByLineAndSpace(defaultFilename)
+    initializeDictToMaxLength(defaultMap, getMaxMappingLengthFromContent(content))
     for entry in content:
-        CYRILLIC_DEFAULT_MAP[len(entry[0])][entry[0]] = entry[1]
+        defaultMap[len(entry[0])][entry[0]] = entry[1]
 
 def initializeSpecificMap(specificMap: dict[int, dict[str, dict[str, str]]], specificFilename: str) -> None:
     
@@ -219,6 +221,14 @@ def transliterateContent(content: str, language: Language) -> str:
                             index, content
                         )
                     ); index += trueLength; mapped = True; break
+                
+            elif language.script == "csa":
+                if nestedDictContains2Layers(
+                    CSA_LATIN_TO_CYRILLIC_MAP, trueLength, substringLower
+                ):
+                    transliterated += refineCaseOfMapped(
+                        substring, CSA_LATIN_TO_CYRILLIC_MAP[trueLength][substringLower]
+                    ); index += trueLength; mapped = True; break
         
         if not mapped:
             transliterated += content[index]
@@ -226,13 +236,15 @@ def transliterateContent(content: str, language: Language) -> str:
 
     return transliterated
 
-def transliterate(language: Language) -> None:
+def transliterate(language: Language, targetScript: str) -> None:
     
     inputFile: File = open(INPUT_FILE, "r", encoding = "utf-8")
     outputFile: File = open(OUTPUT_FILE, "w", encoding = "utf-8")
 
     content: str = inputFile.read()
     transliterated: str = transliterateContent(content, language)
+    if targetScript == "cyrillic":
+        transliterated = transliterateContent(transliterated, Language("csa", "csa", "Latin CSA"))
     outputFile.write(transliterated)
 
     inputFile.close()
@@ -241,7 +253,8 @@ def transliterate(language: Language) -> None:
 if __name__ == "__main__":
 
     initializeUpperLowerMaps()
-    initializeCyrillicDefaultMap()
+    initializeDefaultMap(CYRILLIC_DEFAULT_MAP, CYRILLIC_DEFAULT_FILE)
+    initializeDefaultMap(CSA_LATIN_TO_CYRILLIC_MAP, CSA_LATIN_TO_CYRILLIC_FILE)
     initializeSpecificMap(CYRILLIC_SPECIFIC_MAP, CYRILLIC_SPECIFIC_FILE)
     initializeSpecificMap(LATIN_SPECIFIC_MAP, LATIN_SPECIFIC_FILE)
     initializeChoiceToLangMap()
@@ -264,6 +277,10 @@ if __name__ == "__main__":
         print("Sorry, but you need to enter a valid integer.")
         exit()
 
-    print(f"Your choice is {choice} and your language is \"{language.description}\".")
-    transliterate(language)
+    targetScriptChoice: str = input("Enter \"1\" to transliterate to Latin CSA or \"2\" to transliterate to Cyrillic CSA: ")
+    targetScript: str = "latin" if targetScriptChoice == "1" else "cyrillic"
+    targetScriptDisplay: str = toUpperCase(targetScript[0]) + targetScript[1:]
+
+    print(f"Your input language is \"{language.description}\", and you selected to transliterate to {targetScriptDisplay} CSA.")
+    transliterate(language, targetScript)
     print(f"\nTransliteration complete!\nThank you for using this transliterator, and have a nice day!")
