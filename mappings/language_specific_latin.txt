@@ -27,19 +27,19 @@ dż dž polish
 ě je czech
 h ch polish slovene serbo-croatian montenegrin
 i y czech
-ľ lj slovak
-ni ńi polish
-nia ńa polish
-nią ńǫ polish
-nie ńe polish
-nię ńę polish
-nii ńji polish
-nio ńo polish
-nió ńu polish
-niu ńu polish
-niy ńy polish
-nj ń slovene serbo-croatian montenegrin
-ň ń czech slovak
+ni ňi polish
+nia ňa polish
+nią ňǫ polish
+nie ňe polish
+nię ňę polish
+nii ňji polish
+nio ňo polish
+nió ňu polish
+niu ňu polish
+niy ňy polish
+nj ň serbo-croatian montenegrin
+nj nj slovene
+ń ň polish
 ó u polish
 ô uo slovak
 rz ž polish
@@ -71,7 +71,8 @@ ziu źu polish
 ziy źy polish
 ż ž polish
 ch ch polish czech slovak
-lj lj slovene serbo-croatian montenegrin
+lj ľ serbo-croatian montenegrin
+lj lj slovene
 dz dz polish czech slovak slovene serbo-croatian montenegrin
 dž dž czech slovak slovene serbo-croatian montenegrin
 dź dź polish
